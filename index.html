@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SwiftInvite</title>
+
+<style>
+body {
+  margin: 0;
+  background: #f2f2f2;
+  font-family: Georgia, serif;
+}
+
+.controls {
+  background: #fff;
+  padding: 12px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,.1);
+}
+
+button, select {
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.stage {
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+}
+
+.card {
+  width: 750px;
+  height: 1050px;
+  background: #fffaf3;
+  border: 14px solid #e3cda4;
+  padding: 100px 80px;
+  box-sizing: border-box;
+  text-align: center;
+  position: relative;
+}
+
+.icon {
+  position: absolute;
+  font-size: 46px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.icon.top { top: 20px; }
+.icon.bottom { bottom: 20px; }
+
+.edit {
+  cursor: move;
+}
+
+h1 { font-size: 32px; margin-bottom: 12px; }
+h2 { font-size: 56px; font-weight: bold; margin: 24px 0; }
+p { font-size: 22px; margin: 8px 0; }
+
+.date {
+  letter-spacing: 6px;
+  margin-top: 24px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="controls">
+  <select onchange="setType(this.value)">
+    <option value="wedding">Wedding</option>
+    <option value="birthday">Birthday</option>
+    <option value="baby">Baby Shower</option>
+    <option value="graduation">Graduation</option>
+  </select>
+
+  <select onchange="setFont(this.value)">
+    <option>Georgia</option>
+    <option>Times New Roman</option>
+    <option>Playfair Display</option>
+    <option>Cormorant Garamond</option>
+  </select>
+
+  <button onclick="randomTheme()">Generate</button>
+  <button onclick="download()">Download</button>
+</div>
+
+<div class="stage">
+  <div id="card" class="card">
+    <div id="iconTop" class="icon top">💍</div>
+    <div id="iconBottom" class="icon bottom">💍</div>
+
+    <h1 class="edit" contenteditable>Welcome</h1>
+    <h2 class="edit" contenteditable>Sarah & Ahmed</h2>
+    <p class="edit" contenteditable>Invite you to celebrate</p>
+    <p class="edit date" contenteditable>12 · 08 · 2026</p>
+  </div>
+</div>
+
+<script src="https://unpkg.com/html-to-image@1.11.11/dist/html-to-image.min.js"></script>
+
+<script>
+const themes = [
+  {bg:'#fffaf3', border:'#e3cda4'},
+  {bg:'#f6f0ff', border:'#d4c7f2'},
+  {bg:'#eef7f4', border:'#b8d8cd'},
+  {bg:'#fff1f1', border:'#f0bcbc'}
+];
+
+const icons = {
+  wedding: '💍',
+  birthday: '🎂',
+  baby: '👶',
+  graduation: '🎓'
+};
+
+function randomTheme(){
+  const t = themes[Math.floor(Math.random()*themes.length)];
+  card.style.background = t.bg;
+  card.style.borderColor = t.border;
+}
+
+function setFont(font){
+  card.style.fontFamily = font;
+}
+
+function setType(type){
+  iconTop.innerText = icons[type];
+  iconBottom.innerText = icons[type];
+}
+
+function download(){
+  htmlToImage.toPng(card).then(dataUrl=>{
+    const a=document.createElement('a');
+    a.href=dataUrl;
+    a.download='invitation.png';
+    a.click();
+  });
+}
+</script>
+
+</body>
+</html>
